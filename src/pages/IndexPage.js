@@ -19,8 +19,8 @@ const { Header, Content } = Layout;
 
 
 function IndexPage(props) {
-  const { routes } = props;
-  // console.log(props)
+  const { routes,app } = props;
+  console.log(props)
   return (
     <Layout className={styles.layout}>
       <Header className={styles.header}>
@@ -29,15 +29,8 @@ function IndexPage(props) {
       <Content className={styles.content}>
         {/* 一级路由 */}
         <Switch>
-          {/* <Route path="/home" component={Home} />
-          <Route path="/about" component={About} />
-          <Route path="/menus" component={Menus} />
-          <Route path="/admin" component={Admin} />
-          <Route path="/login" component={Login} />
-          <Route path="/register" component={Register} /> */}
-
           {routes.map((route, i) => (
-            <SubRoutes key={i} {...route} />
+            <SubRoutes key={i} {...route} app={app} />
           ))}
 
           {/* 重定向 */}
