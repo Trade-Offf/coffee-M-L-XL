@@ -12,9 +12,8 @@ const { Header, Content } = Layout;
 
 
 function IndexPage(props) {
-  const { routes } = props;
+  const { routes,app } = props;
   console.log(props)
-  // console.log(props)
   return (
     <Layout className={styles.layout}>
       <Header className={styles.header}>
@@ -24,7 +23,7 @@ function IndexPage(props) {
         {/* 一级路由 */}
         <Switch>
           {routes.map((route, i) => (
-            <SubRoutes key={i} {...route} />
+            <SubRoutes key={i} {...route} app={app} />
           ))}
           <RedirectRoute exact={true} from={'/'} routes={routes}></RedirectRoute>
           {/* 输入的连接不存在时，跳转到NoMatch组件中 */}
