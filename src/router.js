@@ -1,13 +1,9 @@
 import React from "react";
 import { Router, Switch } from "dva/router";
-// import IndexPage from './pages/IndexPage'
-// import Home from "./pages/Home";
-// import About from "./pages/About";
-// import Admin from "./pages/Admin";
-// import Menus from "./pages/Menus";
-// import Register from "./pages/User/Register";
-// import Login from "./pages/User/Login";
 import SubRoutes from "./utils/SubRoutes";
+
+//私有路由开关
+const isAuthority = true;
 
 const RouteConfig = [
   {
@@ -20,21 +16,25 @@ const RouteConfig = [
         component: () => import("./pages/Home"),
         redirect: true,
         model: [import('./models/home')],
+        isAuthority,
       },
       {
         path: "/menus",
         component: () => import("./pages/Menus"),
         model: [],
+        isAuthority,
       },
       {
         path: "/admin",
         component: () => import("./pages/Admin"),
         model: [],
+        isAuthority,
       },
       {
         path: "/about",
         component: () => import("./pages/About"),
         model: [],
+        isAuthority,
       },
       {
         path: "/register",
@@ -55,7 +55,6 @@ function RouterConfig({ history, app }) {
   return (
     <Router history={history}>
       <Switch>
-        {/* <Route path="/" component={IndexPage} /> */}
         {RouteConfig.map((route, i) => (
           <SubRoutes key={i} {...route} app={app} />
         ))}

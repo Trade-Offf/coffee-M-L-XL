@@ -2,21 +2,28 @@ import React from 'react'
 import { Route, Redirect } from 'dva/router'
 import NoMatch from '../components/NoMatch'
 import dynamic from "dva/dynamic";
+import { connect } from 'dva';
 
-const dynamicCom =(app, models, component, routes) =>
- dynamic({
-  app,
-  models: () => models,
-  component: () => 
-    component().then(res => {
-      // console.log(res)
-      const Component = res.default || res;
-      return props => <Component {...props} app={app} routes={routes} />
-    })
-});
+const dynamicCom = (app, models, component, routes, isAuthority, userInfo) =>
+  dynamic({
+    app,
+    models: () => models,
+    component: () =>
+      component().then(res => {
+        // console.log(isAuthority)
+        if (isAuthority) {
+          if(!userInfo.id){
+            return () => <Redirect to="/login" />
+          }
+        }
+        const Component = res.default || res;
+        return props => <Component {...props} app={app} routes={routes} />
+      })
+  });
 
-export default function SubRoutes({ routes, component, app, model }) {
-  return <Route component={dynamicCom(app, model, component, routes)} />;
+function SubRoutes({ routes, component, app, model, isAuthority, userInfo }) {
+  console.log(userInfo);
+  return <Route component={dynamicCom(app, model, component, routes, isAuthority, userInfo)} />;
 }
 
 export function RedirectRoute({ routes, from, exact }) {
@@ -28,10 +35,13 @@ export function RedirectRoute({ routes, from, exact }) {
   return <Redirect exact={exact} from={from} to={to} />
 }
 
-export function NoMatchRoute({ status=404 }) {
+export function NoMatchRoute({ status = 404 }) {
   return (
-    <Route
-      render={props => <NoMatch {...props} status={status} />}
-    />
+    <Route render={props => <NoMatch {...props} status={status} />} />
   )
 }
+
+
+export default connect(({global}) => ({
+  userInfo: global.userInfo
+}))(SubRoutes)

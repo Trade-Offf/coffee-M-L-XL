@@ -3,7 +3,7 @@ import { connect } from "dva";
 import style from "./index.scss";
 
 function index(props) {
-  console.log(props)
+  // console.log(props)
   return (
     <div className={style.home}>
       <div className={style.background}>
